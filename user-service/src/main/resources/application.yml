@@ -3,9 +3,11 @@ server:
 spring:
   cloud:
     nacos:
-      server-addr: localhost:8848
+#      server-addr: localhost:80
       discovery:
         cluster-name: HZ # 集群名称
+#        namespace: 65c9eb9a-bda5-4479-97f5-74ab60c96b09
+#        ephemeral: false #设置为非临时实例
   application:
     name: userservice
   datasource:
