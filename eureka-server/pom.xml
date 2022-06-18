@@ -24,4 +24,39 @@
     </dependency>
     </dependencies>
 
+    <build>
+        <!--修改app.jar-->
+        <finalName>app</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- docker的maven插件，官网：https://github.com/spotify/docker-maven-plugin -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.2.2</version>
+                <configuration>
+                    <!--镜像的名称 跳过上传到私有仓库-->
+                    <imageName>192.168.200.130:8080/${project.artifactId}:${project.version}</imageName>
+                    <!--上传到私有仓库-->
+                    <!--<imageName>106.14.241.224:5000/${project.artifactId}:${project.version}</imageName>-->
+                    <!--依赖一个基础镜像 带JDK 1.8-->
+                    <baseImage>java:8-alpine</baseImage>
+                    <!--java -jar app.jar -->
+                    <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                    <dockerHost>http://192.168.200.130:2375</dockerHost>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
